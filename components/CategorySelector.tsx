@@ -25,8 +25,8 @@ export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }
   const interviewCategory = categories.find(cat => cat.id === 'interview');
 
   return (
-    <div className="min-h-screen bg-background transition-theme">
-      <div className="max-w-md mx-auto p-4 lg:max-w-2xl">
+    <div className="min-h-screen bg-background transition-theme flex flex-col">
+      <div className="w-full max-w-2xl mx-auto p-4 flex-1 flex flex-col">
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-6 pt-4">
           <div className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }
         </motion.div>
 
         {/* 카테고리 그리드 */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6">
           {regularCategories.map((category, index) => (
             <motion.div
               key={category.id}
@@ -133,52 +133,53 @@ export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }
               transition={{ delay: 0.1 + index * 0.1 }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              className="h-20 sm:h-24 lg:h-28"
             >
               <Card
-                className="p-5 cursor-pointer hover:shadow-xl transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-light hover:scale-105 border border-gray-100 dark:border-gray-700"
+                className="h-full p-3 sm:p-4 lg:p-5 cursor-pointer hover:shadow-xl transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-light hover:scale-105 border border-gray-100 dark:border-gray-700 flex flex-col justify-center"
                 onClick={() => onSelectCategory(category)}
               >
-                <div className="text-center space-y-3">
+                <div className="text-center">
                   {/* 카테고리 아이콘 */}
-                  <div className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center ${category.color}/20`}>
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 mx-auto rounded-xl flex items-center justify-center ${category.color}/20 mb-1`}>
                     {category.id === 'romance' ? (
                       <img 
                         src={heartIcon} 
                         alt="연애 아이콘" 
-                        className="w-12 h-12 object-contain"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
                       />
                     ) : category.id === 'introduction' ? (
                       <img 
                         src={handIcon} 
                         alt="자기소개 아이콘" 
-                        className="w-12 h-12 object-contain"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
                       />
                     ) : category.id === 'friends' ? (
                       <img 
                         src={talkIcon} 
                         alt="친구 아이콘" 
-                        className="w-12 h-12 object-contain"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
                       />
                     ) : category.id === 'work' ? (
                       <img 
                         src={likesIcon} 
                         alt="취향 아이콘" 
-                        className="w-12 h-12 object-contain"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
                       />
                     ) : category.id === 'interview' ? (
                       <img 
                         src={dartIcon} 
                         alt="취업준비 아이콘" 
-                        className="w-12 h-12 object-contain"
+                        className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
                       />
                     ) : (
-                      <span className="text-2xl">{category.icon}</span>
+                      <span className="text-lg sm:text-xl lg:text-2xl">{category.icon}</span>
                     )}
                   </div>
                   
                   {/* 카테고리 이름 */}
                   <div>
-                    <h3 className="text-base font-bold text-card-foreground">{category.name}</h3>
+                    <h3 className="text-sm sm:text-base font-bold text-card-foreground">{category.name}</h3>
                   </div>
                 </div>
               </Card>

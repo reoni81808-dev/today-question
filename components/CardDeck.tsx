@@ -16,11 +16,14 @@ interface CardDeckProps {
 
 // 타로카드 뒷면 컴포넌트
 const TarotCardBack = ({ className }: { className?: string }) => (
-  <div className={`w-full h-full rounded-xl relative overflow-hidden ${className}`}>
+  <div className={`w-full h-full relative overflow-hidden ${className}`}>
     <ImageWithFallback 
       src={cardBackImage}
       alt="타로카드 뒷면"
-      className="w-full h-full object-cover rounded-xl"
+      className="w-full h-full object-cover card-shadow"
+      style={{
+        borderRadius: '1rem'
+      }}
     />
   </div>
 );
@@ -77,27 +80,22 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
               <Settings className="w-8 h-8 icon-visible" />
             </Button>
           </div>
-
-          <div className="text-center mb-8 lg:mb-12">
-            <h2 className="text-lg mb-2 text-foreground lg:text-2xl">선택된 질문</h2>
-            <p className="text-muted-foreground text-sm lg:text-base">다시 고르기를 눌러 새로운 질문을 선택하세요</p>
-          </div>
         </div>
 
-        <div className="min-h-[600px] flex items-center justify-center px-4 py-8">
+        <div className="flex-1 flex items-center justify-center px-4 py-8 min-h-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotateY: 180 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-72 h-96 lg:w-80 lg:h-[28rem] rounded-xl shadow-lg flex flex-col items-center justify-center relative overflow-hidden"
-            style={{
-              backgroundImage: 'url(/card-front.png)',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
+            className="w-72 h-96 lg:w-80 lg:h-[28rem] relative"
           >
-            <div className="text-center p-6 lg:p-8 m-4">
+            <img 
+              src="/card-front.png"
+              alt="카드 앞면"
+              className="w-full h-full object-contain"
+              style={{ borderRadius: '1rem' }}
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 lg:p-8 m-4">
               <h3 className="text-lg text-black leading-relaxed px-2 lg:text-xl lg:px-4 font-medium">
                 {selectedQuestion.text}
               </h3>
@@ -116,8 +114,8 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 transition-theme">
-      <div className="max-w-md mx-auto lg:max-w-4xl">
+    <div className="min-h-screen bg-background p-4 transition-theme flex flex-col">
+      <div className="max-w-md mx-auto lg:max-w-4xl flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-6 pt-2 lg:mb-8 lg:pt-4">
           <Button variant="ghost" onClick={onBack} className="text-muted-foreground hover:text-foreground p-4">
             <ArrowLeft className="w-8 h-8 icon-visible" />
@@ -149,7 +147,7 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                 className="inline-block w-24 h-32 lg:w-28 lg:h-36 mb-4"
               >
-                <TarotCardBack />
+                <TarotCardBack className="rounded-[1rem]" />
               </motion.div>
               <p className="text-muted-foreground">카드를 섞고 있습니다...</p>
             </motion.div>
@@ -158,7 +156,7 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
               key="cards"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-3 gap-3 pb-8 lg:grid-cols-4 lg:gap-4"
+              className="grid grid-cols-3 gap-3 pb-8 lg:grid-cols-4 lg:gap-4 flex-1 overflow-y-auto"
             >
               {shuffledQuestions.map((question, index) => (
                 <motion.div
@@ -171,7 +169,7 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
                   className="aspect-[3/4] cursor-pointer relative"
                   onClick={() => handleCardClick(question)}
                 >
-                  <TarotCardBack />
+                  <TarotCardBack className="rounded-[1rem]" />
                 </motion.div>
               ))}
             </motion.div>

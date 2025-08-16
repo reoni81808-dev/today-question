@@ -1,4 +1,4 @@
-// React import는 tsx에서는 jsx-runtime으로 인해 필요없음
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
