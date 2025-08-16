@@ -1,0 +1,183 @@
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { questions, Question, Category } from '../types/questions';
+import { Button } from './ui/button';
+import { ArrowLeft, Shuffle, Settings } from 'lucide-react';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+// import cardBackImage from 'figma:asset/d70764c7ea9eb68da5d72594e6f396274db8d131.png';
+const cardBackImage = '/card-back.png'; // 임시 placeholder
+
+interface CardDeckProps {
+  category: Category;
+  onBack: () => void;
+  onOpenSettings: () => void;
+  onQuestionDrawn?: () => void;
+}
+
+// 타로카드 뒷면 컴포넌트
+const TarotCardBack = ({ className }: { className?: string }) => (
+  <div className={`w-full h-full rounded-xl relative overflow-hidden ${className}`}>
+    <ImageWithFallback 
+      src={cardBackImage}
+      alt="타로카드 뒷면"
+      className="w-full h-full object-cover rounded-xl"
+    />
+  </div>
+);
+
+export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: CardDeckProps) {
+  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+  const [isShuffling, setIsShuffling] = useState(false);
+
+  const categoryQuestions = questions.filter(q => q.categoryId === category.id);
+
+  const shuffleQuestions = () => {
+    setIsShuffling(true);
+    const shuffled = [...categoryQuestions].sort(() => Math.random() - 0.5);
+    
+    setTimeout(() => {
+      // 12개로 제한
+      setShuffledQuestions(shuffled.slice(0, 12));
+      setIsShuffling(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    shuffleQuestions();
+  }, [category]);
+
+  const handleCardClick = (question: Question) => {
+    if (!isShuffling) {
+      setSelectedQuestion(question);
+      // 질문을 뽑았을 때 카운트 증가
+      if (onQuestionDrawn) {
+        onQuestionDrawn();
+      }
+    }
+  };
+
+  const handleShuffle = () => {
+    setSelectedQuestion(null);
+    shuffleQuestions();
+  };
+
+  if (selectedQuestion) {
+    return (
+      <div className="min-h-screen bg-background p-4 flex flex-col transition-theme">
+        <div className="max-w-md mx-auto lg:max-w-2xl w-full">
+          <div className="flex items-center justify-between mb-6 pt-2 lg:mb-8 lg:pt-4">
+            <Button variant="ghost" onClick={onBack} className="text-muted-foreground hover:text-foreground p-4">
+              <ArrowLeft className="w-8 h-8 icon-visible" />
+            </Button>
+            <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color}`}>
+              {category.name}
+            </div>
+            <Button variant="ghost" onClick={onOpenSettings} className="text-muted-foreground hover:text-foreground p-4">
+              <Settings className="w-8 h-8 icon-visible" />
+            </Button>
+          </div>
+
+          <div className="text-center mb-8 lg:mb-12">
+            <h2 className="text-lg mb-2 text-foreground lg:text-2xl">선택된 질문</h2>
+            <p className="text-muted-foreground text-sm lg:text-base">다시 고르기를 눌러 새로운 질문을 선택하세요</p>
+          </div>
+        </div>
+
+        <div className="min-h-[600px] flex items-center justify-center px-4 py-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotateY: 180 }}
+            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-72 h-96 lg:w-80 lg:h-[28rem] rounded-xl shadow-lg flex flex-col items-center justify-center relative overflow-hidden"
+            style={{
+              backgroundImage: 'url(/card-front.png)',
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="text-center p-6 lg:p-8 m-4">
+              <h3 className="text-lg text-black leading-relaxed px-2 lg:text-xl lg:px-4 font-medium">
+                {selectedQuestion.text}
+              </h3>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="text-center pb-8 lg:pb-12">
+          <Button onClick={handleShuffle} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 px-8 py-3 lg:px-10 lg:py-2 text-white button-base">
+            <Shuffle className="w-4 h-4 mr-2 icon-visible" />
+            다시 고르기
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background p-4 transition-theme">
+      <div className="max-w-md mx-auto lg:max-w-4xl">
+        <div className="flex items-center justify-between mb-6 pt-2 lg:mb-8 lg:pt-4">
+          <Button variant="ghost" onClick={onBack} className="text-muted-foreground hover:text-foreground p-4">
+            <ArrowLeft className="w-8 h-8 icon-visible" />
+          </Button>
+          <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color}`}>
+            {category.name}
+          </div>
+          <Button variant="ghost" onClick={onOpenSettings} className="text-muted-foreground hover:text-foreground p-4">
+            <Settings className="w-8 h-8 icon-visible" />
+          </Button>
+        </div>
+
+        <div className="text-center mb-6 lg:mb-8">
+          <h2 className="text-lg mb-2 text-foreground lg:text-2xl">카드를 선택해주세요</h2>
+          <p className="text-muted-foreground text-sm lg:text-base">원하는 카드를 클릭하면 질문이 나타납니다</p>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {isShuffling ? (
+            <motion.div
+              key="shuffling"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-16 lg:py-20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="inline-block w-24 h-32 lg:w-28 lg:h-36 mb-4"
+              >
+                <TarotCardBack />
+              </motion.div>
+              <p className="text-muted-foreground">카드를 섞고 있습니다...</p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="cards"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="grid grid-cols-3 gap-3 pb-8 lg:grid-cols-4 lg:gap-4"
+            >
+              {shuffledQuestions.map((question, index) => (
+                <motion.div
+                  key={question.id}
+                  initial={{ opacity: 0, y: 20, rotateY: 180 }}
+                  animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, rotateY: 10 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="aspect-[3/4] cursor-pointer relative"
+                  onClick={() => handleCardClick(question)}
+                >
+                  <TarotCardBack />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
