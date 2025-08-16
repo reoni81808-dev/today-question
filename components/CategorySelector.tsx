@@ -3,7 +3,7 @@ import { categories, Category } from '../types/questions';
 import { Card } from './ui/card';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Settings, Crown } from 'lucide-react';
+import { Crown, Moon, Sun, MessageCircle } from 'lucide-react';
 const heartIcon = '/heart-icon.png'; // 임시 placeholder
 const catImage = '/cat-image.png'; // 임시 placeholder
 const handIcon = '/hand-icon.png'; // 임시 placeholder
@@ -14,11 +14,12 @@ const dartIcon = '/dart-icon.png'; // 임시 placeholder
 
 interface CategorySelectorProps {
   onSelectCategory: (category: Category) => void;
-  onOpenSettings: () => void;
   isPremium: boolean;
+  darkMode: boolean;
+  onDarkModeChange: (enabled: boolean) => void;
 }
 
-export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }: CategorySelectorProps) {
+export function CategorySelector({ onSelectCategory, isPremium, darkMode, onDarkModeChange }: CategorySelectorProps) {
 
   // 일반 카테고리와 면접준비 카테고리 분리
   const regularCategories = categories.filter(cat => cat.id !== 'interview');
@@ -33,7 +34,7 @@ export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }
             <h1 className="text-lg text-foreground">오늘의 질문</h1>
             <span className="text-lg">✨</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {isPremium && (
               <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-button">
                 <Crown className="w-4 h-4 text-white" />
@@ -42,11 +43,22 @@ export function CategorySelector({ onSelectCategory, onOpenSettings, isPremium }
             )}
             <Button
               variant="ghost"
-              onClick={onOpenSettings}
-              className="p-3"
+              onClick={() => onDarkModeChange(!darkMode)}
+              className="p-2"
               style={{ color: 'var(--muted-foreground)' }}
             >
-              <Settings className="w-6 h-6 icon-visible" />
+              {darkMode ? 
+                <Sun className="w-5 h-5 icon-visible" /> : 
+                <Moon className="w-5 h-5 icon-visible" />
+              }
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => window.open('https://open.kakao.com/o/slsXXSMh', '_blank')}
+              className="p-2"
+              style={{ color: 'var(--muted-foreground)' }}
+            >
+              <MessageCircle className="w-5 h-5 icon-visible" />
             </Button>
           </div>
         </div>

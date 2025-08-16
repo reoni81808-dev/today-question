@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { CategorySelector } from './components/CategorySelector';
 import { CardDeck } from './components/CardDeck';
-import { Settings } from './components/Settings';
 import { PremiumModal } from './components/PremiumModal';
 import { Category } from './types/questions';
 
-type AppState = 'categories' | 'cards' | 'settings';
+type AppState = 'categories' | 'cards';
 
 // 일일 질문 사용량 관리
 const getDailyQuestionCount = (): number => {
@@ -83,40 +82,21 @@ export default function App() {
     setCurrentView('categories');
   };
 
-  const handleOpenSettings = () => {
-    setCurrentView('settings');
-  };
 
-  const handleBackFromSettings = () => {
-    if (selectedCategory) {
-      setCurrentView('cards');
-    } else {
-      setCurrentView('categories');
-    }
-  };
 
   const handlePremiumUpgrade = () => {
     localStorage.setItem('isPremium', 'true');
     setIsPremium(true);
   };
 
-  if (currentView === 'settings') {
-    return (
-      <Settings 
-        onBack={handleBackFromSettings}
-        darkMode={darkMode}
-        onDarkModeChange={setDarkMode}
-      />
-    );
-  }
-
   if (currentView === 'cards' && selectedCategory) {
     return (
       <CardDeck 
         category={selectedCategory} 
         onBack={handleBackToCategories}
-        onOpenSettings={handleOpenSettings}
         onQuestionDrawn={handleQuestionDrawn}
+        darkMode={darkMode}
+        onDarkModeChange={setDarkMode}
       />
     );
   }
@@ -125,8 +105,9 @@ export default function App() {
     <>
       <CategorySelector 
         onSelectCategory={handleSelectCategory}
-        onOpenSettings={handleOpenSettings}
         isPremium={isPremium}
+        darkMode={darkMode}
+        onDarkModeChange={setDarkMode}
       />
       
       <PremiumModal

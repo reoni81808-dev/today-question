@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { questions, Question, Category } from '../types/questions';
 import { Button } from './ui/button';
-import { ArrowLeft, Shuffle, Settings } from 'lucide-react';
+import { ArrowLeft, Shuffle, Moon, Sun, MessageCircle } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 // import cardBackImage from 'figma:asset/d70764c7ea9eb68da5d72594e6f396274db8d131.png';
 const cardBackImage = '/card-back.png'; // 임시 placeholder
@@ -10,8 +10,9 @@ const cardBackImage = '/card-back.png'; // 임시 placeholder
 interface CardDeckProps {
   category: Category;
   onBack: () => void;
-  onOpenSettings: () => void;
   onQuestionDrawn?: () => void;
+  darkMode: boolean;
+  onDarkModeChange: (enabled: boolean) => void;
 }
 
 // 타로카드 뒷면 컴포넌트
@@ -28,7 +29,7 @@ const TarotCardBack = ({ className }: { className?: string }) => (
   </div>
 );
 
-export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: CardDeckProps) {
+export function CardDeck({ category, onBack, onQuestionDrawn, darkMode, onDarkModeChange }: CardDeckProps) {
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -76,9 +77,27 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
             <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color}`}>
               {category.name}
             </div>
-            <Button variant="ghost" onClick={onOpenSettings} className="text-muted-foreground hover:text-foreground p-4">
-              <Settings className="w-8 h-8 icon-visible" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                onClick={() => onDarkModeChange(!darkMode)}
+                className="p-2"
+                style={{ color: 'var(--muted-foreground)' }}
+              >
+                {darkMode ? 
+                  <Sun className="w-5 h-5 icon-visible" /> : 
+                  <Moon className="w-5 h-5 icon-visible" />
+                }
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => window.open('https://open.kakao.com/o/slsXXSMh', '_blank')}
+                className="p-2"
+                style={{ color: 'var(--muted-foreground)' }}
+              >
+                <MessageCircle className="w-5 h-5 icon-visible" />
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -123,9 +142,27 @@ export function CardDeck({ category, onBack, onOpenSettings, onQuestionDrawn }: 
           <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color}`}>
             {category.name}
           </div>
-          <Button variant="ghost" onClick={onOpenSettings} className="text-muted-foreground hover:text-foreground p-4">
-            <Settings className="w-8 h-8 icon-visible" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => onDarkModeChange(!darkMode)}
+              className="p-2"
+              style={{ color: 'var(--muted-foreground)' }}
+            >
+              {darkMode ? 
+                <Sun className="w-5 h-5 icon-visible" /> : 
+                <Moon className="w-5 h-5 icon-visible" />
+              }
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => window.open('https://open.kakao.com/o/slsXXSMh', '_blank')}
+              className="p-2"
+              style={{ color: 'var(--muted-foreground)' }}
+            >
+              <MessageCircle className="w-5 h-5 icon-visible" />
+            </Button>
+          </div>
         </div>
 
         <div className="text-center mb-6 lg:mb-8">
