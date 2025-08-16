@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { CategorySelector } from './components/CategorySelector';
 import { CardDeck } from './components/CardDeck';
 import { PremiumModal } from './components/PremiumModal';
+import { LinkShare } from './components/LinkShare';
 import { Category } from './types/questions';
 
-type AppState = 'categories' | 'cards';
+type AppState = 'categories' | 'cards' | 'linkShare';
 
 // 일일 질문 사용량 관리
 const getDailyQuestionCount = (): number => {
@@ -82,6 +83,14 @@ export default function App() {
     setCurrentView('categories');
   };
 
+  const handleOpenLinkShare = () => {
+    setCurrentView('linkShare');
+  };
+
+  const handleBackFromLinkShare = () => {
+    setCurrentView('categories');
+  };
+
 
 
   const handlePremiumUpgrade = () => {
@@ -101,10 +110,21 @@ export default function App() {
     );
   }
 
+  if (currentView === 'linkShare') {
+    return (
+      <LinkShare
+        onBack={handleBackFromLinkShare}
+        darkMode={darkMode}
+        onDarkModeChange={setDarkMode}
+      />
+    );
+  }
+
   return (
     <>
       <CategorySelector 
         onSelectCategory={handleSelectCategory}
+        onOpenLinkShare={handleOpenLinkShare}
         isPremium={isPremium}
         darkMode={darkMode}
         onDarkModeChange={setDarkMode}
