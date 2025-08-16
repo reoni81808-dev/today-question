@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { X, ExternalLink, Image as ImageIcon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface LinkMetadata {
   title: string;
@@ -50,7 +50,7 @@ export function LinkPreview({ url, onRemove, className = '' }: LinkPreviewProps)
                        doc.querySelector('meta[property="twitter:image"]')?.getAttribute('content') ||
                        '/iphoneimage.png'; // 기본 썸네일로 iPhone 이미지 사용
           
-          const siteName = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content');
+          const siteName = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content') || undefined;
           
           setMetadata({
             title,

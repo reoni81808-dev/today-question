@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card } from './ui/card';
-import { Link, Plus, X } from 'lucide-react';
+import { Link, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LinkPreview } from './LinkPreview';
 
