@@ -3,7 +3,7 @@ import { categories, Category } from '../types/questions';
 import { Card } from './ui/card';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Crown, Moon, Sun, MessageCircle, Share2 } from 'lucide-react';
+import { Moon, Sun, MessageCircle, Share2 } from 'lucide-react';
 const heartIcon = '/heart-icon.png'; // 임시 placeholder
 const catImage = '/cat-image.png'; // 임시 placeholder
 const handIcon = '/hand-icon.png'; // 임시 placeholder
@@ -15,12 +15,11 @@ const dartIcon = '/dart-icon.png'; // 임시 placeholder
 interface CategorySelectorProps {
   onSelectCategory: (category: Category) => void;
   onOpenLinkShare: () => void;
-  isPremium: boolean;
   darkMode: boolean;
   onDarkModeChange: (enabled: boolean) => void;
 }
 
-export function CategorySelector({ onSelectCategory, onOpenLinkShare, isPremium, darkMode, onDarkModeChange }: CategorySelectorProps) {
+export function CategorySelector({ onSelectCategory, onOpenLinkShare, darkMode, onDarkModeChange }: CategorySelectorProps) {
 
   // 일반 카테고리와 면접준비 카테고리 분리
   const regularCategories = categories.filter(cat => cat.id !== 'interview');
@@ -36,12 +35,6 @@ export function CategorySelector({ onSelectCategory, onOpenLinkShare, isPremium,
             <span className="text-lg">✨</span>
           </div>
           <div className="flex items-center gap-2">
-            {isPremium && (
-              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-button">
-                <Crown className="w-4 h-4 text-white" />
-                <span className="text-white text-sm">프리미엄</span>
-              </div>
-            )}
             <Button
               variant="ghost"
               onClick={() => onDarkModeChange(!darkMode)}
