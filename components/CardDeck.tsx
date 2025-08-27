@@ -135,14 +135,15 @@ export function CardDeck({ category, onBack, onQuestionDrawn, darkMode, onDarkMo
   return (
     <div className="min-h-screen bg-background p-4 transition-theme flex flex-col">
       <div className="max-w-md mx-auto lg:max-w-4xl flex-1 flex flex-col">
-        <div className="flex items-center justify-between mb-6 pt-2 lg:mb-8 lg:pt-4">
+        {/* 고정된 헤더 영역 */}
+        <div className="flex items-center justify-between mb-6 pt-2 lg:mb-8 lg:pt-4 flex-shrink-0">
           <Button variant="ghost" onClick={onBack} className="text-muted-foreground hover:text-foreground p-4">
             <ArrowLeft className="w-8 h-8 icon-visible" />
           </Button>
-          <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color}`}>
+          <div className={`px-3 py-1 rounded-button text-white text-xs lg:text-sm ${category.color} flex-shrink-0`}>
             {category.name}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Button
               variant="ghost"
               onClick={() => onDarkModeChange(!darkMode)}
@@ -165,53 +166,57 @@ export function CardDeck({ category, onBack, onQuestionDrawn, darkMode, onDarkMo
           </div>
         </div>
 
-        <div className="text-center mb-6 lg:mb-8">
+        {/* 고정된 제목 영역 */}
+        <div className="text-center mb-6 lg:mb-8 flex-shrink-0">
           <h2 className="text-lg mb-2 text-foreground lg:text-2xl">카드를 선택해주세요</h2>
           <p className="text-muted-foreground text-sm lg:text-base">원하는 카드를 클릭하면 질문이 나타납니다</p>
         </div>
 
-        <AnimatePresence mode="wait">
-          {isShuffling ? (
-            <motion.div
-              key="shuffling"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-16 lg:py-20"
-            >
+        {/* 카드 영역 - 고정 높이로 설정 */}
+        <div className="flex-1 min-h-0">
+          <AnimatePresence mode="wait">
+            {isShuffling ? (
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-24 h-32 lg:w-28 lg:h-36 mb-4"
+                key="shuffling"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-16 lg:py-20 h-full flex flex-col items-center justify-center"
               >
-                <TarotCardBack className="rounded-[1rem]" />
-              </motion.div>
-              <p className="text-muted-foreground">카드를 섞고 있습니다...</p>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="cards"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="grid grid-cols-3 gap-3 pb-8 lg:grid-cols-4 lg:gap-4 flex-1 overflow-y-auto"
-            >
-              {shuffledQuestions.map((question, index) => (
                 <motion.div
-                  key={question.id}
-                  initial={{ opacity: 0, y: 20, rotateY: 180 }}
-                  animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, rotateY: 10 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="aspect-[3/4] cursor-pointer relative"
-                  onClick={() => handleCardClick(question)}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="inline-block w-24 h-32 lg:w-28 lg:h-36 mb-4"
                 >
                   <TarotCardBack className="rounded-[1rem]" />
                 </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <p className="text-muted-foreground">카드를 섞고 있습니다...</p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="cards"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="grid grid-cols-3 gap-3 pb-8 lg:grid-cols-4 lg:gap-4 h-full overflow-y-auto"
+              >
+                {shuffledQuestions.map((question, index) => (
+                  <motion.div
+                    key={question.id}
+                    initial={{ opacity: 0, y: 20, rotateY: 180 }}
+                    animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05, rotateY: 10 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="aspect-[3/4] cursor-pointer relative"
+                    onClick={() => handleCardClick(question)}
+                  >
+                    <TarotCardBack className="rounded-[1rem]" />
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
