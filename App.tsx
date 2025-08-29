@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CategorySelector } from './components/CategorySelector';
 import { CardDeck } from './components/CardDeck';
-import { LinkShare } from './components/LinkShare';
 import { Category } from './types/questions';
 
-type AppState = 'categories' | 'cards' | 'linkShare';
+type AppState = 'categories' | 'cards';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppState>('categories');
@@ -33,16 +32,6 @@ export default function App() {
     setCurrentView('categories');
   };
 
-  const handleOpenLinkShare = () => {
-    setCurrentView('linkShare');
-  };
-
-  const handleBackFromLinkShare = () => {
-    setCurrentView('categories');
-  };
-
-
-
   if (currentView === 'cards' && selectedCategory) {
     return (
       <CardDeck 
@@ -55,20 +44,9 @@ export default function App() {
     );
   }
 
-  if (currentView === 'linkShare') {
-    return (
-      <LinkShare
-        onBack={handleBackFromLinkShare}
-        darkMode={darkMode}
-        onDarkModeChange={setDarkMode}
-      />
-    );
-  }
-
   return (
     <CategorySelector 
       onSelectCategory={handleSelectCategory}
-      onOpenLinkShare={handleOpenLinkShare}
       darkMode={darkMode}
       onDarkModeChange={setDarkMode}
     />

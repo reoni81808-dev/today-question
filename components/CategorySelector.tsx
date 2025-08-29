@@ -3,7 +3,7 @@ import { categories, Category } from '../types/questions';
 import { Card } from './ui/card';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Moon, Sun, MessageCircle, Share2 } from 'lucide-react';
+import { Moon, Sun, MessageCircle } from 'lucide-react';
 const heartIcon = '/heart-icon.png'; // 임시 placeholder
 const catImage = '/cat-image.png'; // 임시 placeholder
 const handIcon = '/hand-icon.png'; // 임시 placeholder
@@ -14,12 +14,11 @@ const dartIcon = '/dart-icon.png'; // 임시 placeholder
 
 interface CategorySelectorProps {
   onSelectCategory: (category: Category) => void;
-  onOpenLinkShare: () => void;
   darkMode: boolean;
   onDarkModeChange: (enabled: boolean) => void;
 }
 
-export function CategorySelector({ onSelectCategory, onOpenLinkShare, darkMode, onDarkModeChange }: CategorySelectorProps) {
+export function CategorySelector({ onSelectCategory, darkMode, onDarkModeChange }: CategorySelectorProps) {
 
   // 일반 카테고리와 면접준비 카테고리 분리
   const regularCategories = categories.filter(cat => cat.id !== 'interview');
@@ -53,14 +52,6 @@ export function CategorySelector({ onSelectCategory, onOpenLinkShare, darkMode, 
               style={{ color: 'var(--muted-foreground)' }}
             >
               <MessageCircle className="w-5 h-5 icon-visible" />
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={onOpenLinkShare}
-              className="p-2"
-              style={{ color: 'var(--muted-foreground)' }}
-            >
-              <Share2 className="w-5 h-5 icon-visible" />
             </Button>
           </div>
         </div>
